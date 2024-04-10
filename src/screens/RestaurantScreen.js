@@ -2,7 +2,7 @@ import React from 'react'
 import { View, Text } from 'react-native'
 
 
-export default function RestaurantScreen() {
+export function RestaurantScreen() {
     return (
         <View>
             <Text>Estamos en RestaurantScreen</Text>
