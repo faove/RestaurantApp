@@ -5,7 +5,7 @@ import { FavoritesScreen } from "../screens/FavoritesScreen";
 import { RankingScreen } from "../screens/RankingScreen";
 import { SearchScreen } from "../screens/SearchScreen";
 import { AccountScreen } from "../screens/AccountScreen";
-
+import { screen } from "../utils";
 
 const Tab = createBottomTabNavigator();
 
@@ -16,11 +16,31 @@ export function AppNavigation() {
             tabBarInactiveTintColor: "#646464",
             tabBarIcon: ({ color, size }) => screenOptions(route, color, size),
         })}>
-            <Tab.Screen name="Restaurant" component={RestaurantScreen} />
-            <Tab.Screen name="Favorites" component={FavoritesScreen} />
-            <Tab.Screen name="Ranking" component={RankingScreen} />
-            <Tab.Screen name="Search" component={SearchScreen} />
-            <Tab.Screen name="Account" component={AccountScreen} />
+            <Tab.Screen 
+                name={screen.restaurant.tab} 
+                component={RestaurantScreen} 
+                options={{ title: "Restaurants"}} 
+            />
+            <Tab.Screen 
+                name={screen.favorites.tab} 
+                component={FavoritesScreen} 
+                options={{ title: "Favorite"}} 
+            />
+            <Tab.Screen 
+                name={screen.ranking.tab} 
+                component={RankingScreen} 
+                options={{ title: "Ranking"}} 
+            />
+            <Tab.Screen 
+                name={screen.search.tab} 
+                component={SearchScreen} 
+                options={{ title: "Search"}} 
+            />
+            <Tab.Screen 
+                name={screen.account.tab} 
+                component={AccountScreen} 
+                options={{ title: "Account"}} 
+            />
         </Tab.Navigator>
     )
 }
@@ -28,23 +48,23 @@ export function AppNavigation() {
 function screenOptions(route, color, size) {
     let iconName;
 
-    if (route.name === "Restaurant") {
+    if (route.name === screen.restaurant.tab) {
         iconName = "compass-outline";
     }
 
-    if (route.name === "Favorites") {
+    if (route.name === screen.favorites.tab) {
         iconName = "heart-outline";
     }
 
-    if (route.name === "Ranking") {
+    if (route.name === screen.ranking.tab) {
         iconName = "star-outline";
     }
 
-    if (route.name === "Search") {
+    if (route.name === screen.search.tab) {
         iconName = "magnify";
     }
 
-    if (route.name === "Account") {
+    if (route.name === screen.account.tab) {
         iconName = "home-outline";
     }
 
