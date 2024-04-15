@@ -17,6 +17,8 @@ const rankingStack = {
 const accountStack = {
     tab: "AccountTab",
     account: "Account",
+    login: "Login",
+    register: "Register",
 }    
 
 const searchStack = {
