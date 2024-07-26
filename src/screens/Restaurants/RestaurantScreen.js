@@ -9,7 +9,7 @@ export function RestaurantScreen(props) {
     const gotoRestaurant = () => {
         //navigation.navigate(screen.restaurant.addRestaurant)
         //console.log(navigation.navigate)
-        navigation.navigate(screen.account.tab, screen.account.account)
+        navigation.navigate(screen.account.tab, {screen: screen.account.account})
     }
 
     return (
