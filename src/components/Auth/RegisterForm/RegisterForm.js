@@ -18,8 +18,6 @@ export function RegisterForm() {
     validationShema: validationShema(),
     validateOnChange: false,
     onSubmit: async (formValue) => {
-        // console.log("Formulario enviado");
-        // console.log(formValue);
       try {
         const auth = getAuth();
         await createUserWithEmailAndPassword(auth, formValue.email, formValue.password );
