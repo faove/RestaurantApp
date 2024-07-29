@@ -46,8 +46,8 @@ export function LoginForm() {
             iconStyle={styles.icon}
             />
           }
-          onChangeText={(text) => formik.setFieldValue("email", text)}
-          errorMessage={formik.errors.email}  
+        onChangeText={(text) => formik.setFieldValue("email", text)}
+        errorMessage={formik.errors.email}
       />
       <Input 
         placeholder="Contraseña" 
