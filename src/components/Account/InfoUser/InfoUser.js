@@ -6,7 +6,9 @@ import { getStorage, ref, uploadBytes } from 'firebase/storage';
 import * as ImagePicker from "expo-image-picker";
 import { styles } from './InfoUser.styles';
 
-export function InfoUser() {
+export function InfoUser(props) {
+
+  const {setLoading, setLoadingText} = props;
   
   const { uid, photoURL, displayName, email } = getAuth().currentUser;
 
@@ -36,6 +38,9 @@ export function InfoUser() {
   const uploadImage = async (uri) => {
 
     try {
+      setLoadingText("Actualizando Avatar");
+      setLoading(true);
+
       const response = await fetch(uri);
       const blob = await response.blob();
 
@@ -43,9 +48,16 @@ export function InfoUser() {
       const storageRef = ref(storage, `avatar/${uid}`);
 
       const snapshot = await uploadBytes(storageRef, blob);
+
+      updatePhotoUrl(snapshot.metadata.fullPath);
+
     } catch (error) {
       console.error('Error uploading image:', error);
     }
+  };
+
+  const updatePhotoUrl = (imagePath) => {
+    setLoading(false);
   };
 
   return (
