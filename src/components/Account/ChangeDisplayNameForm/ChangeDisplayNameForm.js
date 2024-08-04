@@ -1,9 +1,38 @@
 import React from 'react'
 import { View, Text } from 'react-native'
 import { Input, Button } from "@rneui/base"
+import { useFormik } from 'formik'
+import { getAuth, updateProfile } from "firebase/auth"
+import Toast from "react-native-toast-message"
+import { initialValues, validationSchema } from "./ChangeDisplayNameForm.data";
 import { styles } from './ChangeDisplayNameForm.styles'
 
-export function ChangeDisplayNameForm() {
+export function ChangeDisplayNameForm(props) {
+  const { onClose } = props;
+
+  const formik = useFormik({
+    initialValues: initialValues(),
+    validationSchema: validationSchema(),
+    validateOnChange: false,
+    onSubmit: async (formValue) => {
+      try {
+        const {displayName} = formValue;
+        const currentUser = getAuth().currentUser;
+        await updateProfile(currentUser, {displayName});
+
+        onClose();
+
+      } catch (error) {
+        Toast.show({
+          type: "error",
+          position: "bottom",
+          text1: "Error al cambiar el nombre y apellidos"
+        })
+      }
+    },
+  });
+
+
   return (
     <View style={styles.content}>
       <Input 
@@ -12,11 +41,16 @@ export function ChangeDisplayNameForm() {
           type: "material-community", 
           name: "account-circle-outline",
           color: "#C2C2C2",
-          }} />
+          }} 
+          onChangeText={(text) => formik.setFieldValue("displayName", text)}
+          errorMessage={formik.errors.displayName} 
+      />
       <Button 
         title="Cambiar Nombre y apellidos"
         containerStyle={styles.btnContainer}
         buttonStyle={styles.btn}
+        onPress={formik.handleSubmit}
+        loading={formik.isSubmitting}
       />
      
     </View>
