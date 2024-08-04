@@ -5,7 +5,8 @@ import { map } from "lodash";
 import { Modal } from "../../components"
 import { ChangeDisplayNameForm } from "./ChangeDisplayNameForm";
 
-export function AccountOptions() {
+export function AccountOptions(props) {
+    const { onReload } = props;
 
     const [showModal, setShowModal] = useState(false);
     const [renderComponent, setRenderComponent] = useState(null);
@@ -15,7 +16,7 @@ export function AccountOptions() {
     const selectedComponet = (key) => {
 
         if (key === "displayName") {
-            setRenderComponent(<ChangeDisplayNameForm />);
+            setRenderComponent(<ChangeDisplayNameForm onClose={ onCloseOpenModel } onReload={ onReload } />);
         }
 
         if (key === "email") {
