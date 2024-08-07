@@ -1,7 +1,9 @@
 import React, { useState } from 'react'
 import { View } from 'react-native'
 import { Input, Button } from "@rneui/base"
-import { useFormik, validateYupSchema } from "formik"
+import { getAuth, updateEmail, EmailAuthProvider, reauthenticateWithCredential } from 'firebase/auth';
+import Toast from 'react-native-toast-message';
+import { useFormik } from "formik"
 import { initialValues, validationSchema } from './ChangeEmailForm.data'
 import { styles } from './ChangeEmailForm.styles'
 
@@ -15,7 +17,23 @@ export function ChangeEmailForm(props) {
       validationSchema: validationSchema(),
       validateOnChange: false,
       onSubmit: async (formValue) => {
-        console.log(formValue);
+        try {
+          const currentUser = getAuth().currentUser;
+          const credentials = EmailAuthProvider.credential(currentUser.email, formValue.password);
+          reauthenticateWithCredential(currentUser, credentials);
+
+          await updateEmail(currentUser, formValue.email);
+
+          onReload();
+          onClose();
+          
+        } catch (error) {
+            Toast.show({
+            type: 'error',
+            position: 'bottom',
+            text1: "Error al cambiar el email",
+          })
+        }
       },
     });
 
