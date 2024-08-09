@@ -1,9 +1,9 @@
 import React, { useState } from 'react'
 import { View } from 'react-native'
 import { Input, Button } from "@rneui/base"
+import { useFormik } from "formik"
 import { getAuth, updateEmail, EmailAuthProvider, reauthenticateWithCredential } from 'firebase/auth';
 import Toast from 'react-native-toast-message';
-import { useFormik } from "formik"
 import { initialValues, validationSchema } from './ChangeEmailForm.data'
 import { styles } from './ChangeEmailForm.styles'
 
@@ -18,10 +18,13 @@ export function ChangeEmailForm(props) {
       validateOnChange: false,
       onSubmit: async (formValue) => {
         try {
-          const currentUser = getAuth().currentUser;
-          const credentials = EmailAuthProvider.credential(currentUser.email, formValue.password);
-          reauthenticateWithCredential(currentUser, credentials);
 
+          const currentUser = getAuth().currentUser;
+
+          const credentials = EmailAuthProvider.credential(currentUser.email, formValue.password);
+          
+          await reauthenticateWithCredential(currentUser, credentials);
+          
           await updateEmail(currentUser, formValue.email);
 
           onReload();
