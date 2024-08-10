@@ -26,7 +26,7 @@ export function AccountOptions(props) {
         }
 
         if (key === "password") {
-            setRenderComponent(<ChangePasswordForm onClose={onCloseOpenModel}/>);
+            setRenderComponent(<ChangePasswordForm onClose={onCloseOpenModel} />);
         }
         onCloseOpenModel();
     }
