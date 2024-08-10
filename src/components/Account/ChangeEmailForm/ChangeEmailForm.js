@@ -8,7 +8,7 @@ import { initialValues, validationSchema } from './ChangeEmailForm.data'
 import { styles } from './ChangeEmailForm.styles'
 
 export function ChangeEmailForm(props) {
-    const { onclose, onReload } = props;
+    const { onClose, onReload } = props;
     const [showPassword, setShowPassword] = useState(false)
     const onShowPassword = () => setShowPassword((prevState) => !prevState);
 
