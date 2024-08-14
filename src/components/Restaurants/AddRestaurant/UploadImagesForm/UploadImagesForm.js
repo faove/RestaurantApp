@@ -1,14 +1,15 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { View, Alert } from 'react-native'
 import { Icon, Avatar, Text } from "@rneui/base"
 import * as ImagePicker from "expo-image-picker";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { v4 as uuid } from "uuid";
+import { LoadingModal } from "../../../Share";
 import { styles } from './UploadImagesForm.styles';
 
 export function UploadImagesForm(props) {
     const { formik } = props;
-
+    const [isLoading, setIsLoading] = useState(false)
     const openGallery = async () => {
         const result = await ImagePicker.launchImageLibraryAsync({
             mediaTypes: ImagePicker.MediaTypeOptions.All,
@@ -18,7 +19,8 @@ export function UploadImagesForm(props) {
             quality: 1,
         });
         if (!result.canceled) {
-            uploadImage(result.assets[0].uri);
+          setIsLoading(true);
+          uploadImage(result.assets[0].uri);
         }
     };
 
@@ -30,15 +32,29 @@ export function UploadImagesForm(props) {
         const storage = getStorage();
         const storageRef = ref(storage, `restaurants/${uuid()}`);
 
-        const snapshot = await uploadBytes(storageRef, blob);
+        //const snapshot = await uploadBytes(storageRef, blob);
 
-        // await uploadBytes(storageRef, blob).then((snapshot) => {
-        //   console.log(snapshot);
-        // });  
+        await uploadBytes(storageRef, blob).then((snapshot) => {
+          console.log(snapshot);
+          updatePhotosRestaurant(snapshot.metadata.fullPath)
+        });  
       } catch (error) {
         console.error('Error uploading image:', error);
       }
       
+    };
+
+    const updatePhotosRestaurant = async (imagePath) => {
+      const storage = getStorage();
+      const imageRef = ref(storage, imagePath);
+
+      const imageUrl = await getDownloadURL(imageRef);
+
+      // console.log(imageUrl);
+      formik.setFieldValue("images", [...formik.values.images, imageUrl]);
+
+      setIsLoading(false);
+
     };
 
   return (
@@ -52,6 +68,8 @@ export function UploadImagesForm(props) {
             onPress={openGallery}
         />
       </View>
+      <Text style={styles.error}>{formik.errors.images}</Text>
+      <LoadingModal show={isLoading} text="Subiendo imagen" /> 
     </>
   );
 }
