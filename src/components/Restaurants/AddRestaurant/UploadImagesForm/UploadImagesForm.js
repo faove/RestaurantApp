@@ -4,7 +4,7 @@ import { Icon, Avatar, Text } from "@rneui/base"
 import * as ImagePicker from "expo-image-picker";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { v4 as uuid } from "uuid";
-import { map } from "lodash";
+import { map, filter } from "lodash";
 import { LoadingModal } from "../../../Share";
 import { styles } from './UploadImagesForm.styles';
 
@@ -58,6 +58,26 @@ export function UploadImagesForm(props) {
 
     };
 
+    const removeImage = (img) => {
+      Alert.alert(
+        "Eliminar imagen",
+        "Estás seguro de eliminar esta imagen?",
+        [
+          {
+            text: "Cancelar",
+            style: "cancel",
+          },
+          {
+            text: "Eliminar",
+            onPress: () => {
+              const result = filter(formik.values.images, (image) => image !== img)
+              formik.setFieldValue("images", result);
+            },
+          },
+        ]
+      )
+    };
+
   return (
     <>
       <ScrollView style={styles.viewImage} horizontal showsHorizontalScrollIndicator={false}>
@@ -73,6 +93,7 @@ export function UploadImagesForm(props) {
             key={image}
             source={{ uri: image }}
             containerStyle={styles.imageStyle}
+            onPress={() => removeImage(image)}
           />
         ))}
       </ScrollView>
