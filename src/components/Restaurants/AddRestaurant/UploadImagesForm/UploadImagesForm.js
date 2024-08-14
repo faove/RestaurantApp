@@ -4,6 +4,7 @@ import { Icon, Avatar, Text } from "@rneui/base"
 import * as ImagePicker from "expo-image-picker";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { v4 as uuid } from "uuid";
+import { map } from "lodash";
 import { LoadingModal } from "../../../Share";
 import { styles } from './UploadImagesForm.styles';
 
@@ -67,6 +68,13 @@ export function UploadImagesForm(props) {
             containerStyle= {styles.containerIcon}
             onPress={openGallery}
         />
+        {map(formik.values.images, (image) => (
+          <Avatar
+            key={image}
+            source={{ uri: image }}
+            containerStyle={styles.imageStyle}
+          />
+        ))}
       </View>
       <Text style={styles.error}>{formik.errors.images}</Text>
       <LoadingModal show={isLoading} text="Subiendo imagen" /> 
